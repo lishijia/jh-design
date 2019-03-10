@@ -2,7 +2,6 @@ package com.jh.design.proxy;
 
 import sun.misc.ProxyGenerator;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 public class Test {
