@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -21,20 +20,45 @@ public class SocketServer {
         ServerSocket server = new ServerSocket(6379);
         System.out.println("the server is start");
         // 阻塞等待客户端连接
-        Socket socket = server.accept();
-        // 一般来了连接后都是开一个线程去专门处理这个客户端
-        System.out.println("client connected");
-        InputStream inputStream = socket.getInputStream();
-        OutputStream outputStream = socket.getOutputStream();
-        int len = 0;
-        byte[] bytes = new byte[1024];
-        while ( (len = inputStream.read(bytes)) != -1){
-            System.out.println("server receive data from client。 the data is = " + new String(bytes, 0, len));
-            outputStream.write(bytes);
+        while(true) {
+            System.out.println("main thread wait for client to connect");
+            Socket socket = server.accept();
+            System.out.println("client connected");
+            Thread socketWorkThread = new Thread(new Worker(socket));
+            socketWorkThread.start();
         }
-        inputStream.close();
-        outputStream.close();
-        server.close();
+
+    }
+
+    static class Worker implements Runnable{
+        private Socket socket;
+
+        public Worker(Socket socket) {
+            this.socket = socket;
+        }
+
+        @Override
+        public void run() {
+            InputStream inputStream = null;
+            try {
+                inputStream = socket.getInputStream();
+                // 一般来了连接后都是开一个线程去专门处理这个客户端
+                System.out.println("socket worker thread wait client to send data");
+                int len = 0;
+                byte[] bytes = new byte[1024];
+                while ((len = inputStream.read(bytes)) != -1) {
+                    System.out.println("server receive data from client。 the data is = " + new String(bytes, 0, len));
+                }
+            }catch (IOException e){
+            }finally {
+                try {
+                    if(inputStream!=null){
+                        inputStream.close();
+                    }
+                    socket.close();
+                }catch (IOException e){}
+            }
+        }
     }
 
 }

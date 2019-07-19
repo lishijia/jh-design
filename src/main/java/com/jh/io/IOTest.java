@@ -12,9 +12,16 @@ import java.io.*;
  **/
 public class IOTest {
 
+    public static void main(String[] args)throws IOException {
+        /**
+         * System.in 需要main方法才能在控制台输入
+         */
+        test1();
+        test2();
 
-    @Test
-    public void test1()throws IOException {
+    }
+
+    public static void test1()throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("please input char");
         char c;
@@ -22,8 +29,7 @@ public class IOTest {
         System.out.println("you put the char is " + c);
     }
 
-    @Test
-    public void test2() throws IOException {
+    public static void test2() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("please input char");
         String c = "";
