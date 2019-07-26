@@ -1,0 +1,43 @@
+---------------------------AbstractBootstrap-----------
+ -->bind(int inetPort)--AbstractBootstrap，Netty Server端启动绑定
+
+   -->doBind(final SocketAddress localAddress)--AbstractBootstrap，Netty Server端启动绑定
+     -->initAndRegister()--AbstractBootstrap，初始化Channel与注册channel
+	   -->newChannel()--BootstrapChannelFactory这个工厂类在启动之前就已经实例化好了
+	     -->clazz.newInstance()-->BootstrapChannelFactory,通过反射实例化channel（NioServerSocketChannel）
+		   -->NioServerSocketChannel()
+		     -->newSocket(SelectorProvider provider)--NioServerSocketChannel
+			   ->return provider.openServerSocketChannel(); 最终返回ServerSocketChannel，jdk的ServerSocketChannel类
+			 -->NioServerSocketChannel(ServerSocketChannel channel)
+			   -->super(null, channel, SelectionKey.OP_ACCEPT)--主要把channel往上传递，另外需要传递的是一个Accept这么一个事件
+			     -->AbstractNioMessageChannel(Channel parent, SelectableChannel ch, int readInterestOp)--AbstractNioMessageChannel
+				   -->super(parent, ch, readInterestOp)--AbstractNioMessageChannel
+				     --AbstractNioChannel(Channel parent, SelectableChannel ch, int readInterestOp)
+					   -->super(parent)
+					     -->AbstractChannel(Channel parent)--AbstractChannel
+						   -->this.parent = parent;绑定jdk的serverSocketchannel
+						   -->unsafe = newUnsafe();初始化它的Unsafe操作类
+						   -->pipeline = new DefaultChannelPipeline(this);初始化默认的Pipeline
+					   -->this.ch = ch;绑定jdk的ServerSocket
+					   -->this.readInterestOp = readInterestOp;初始化Accept事件属性
+					   -->ch.configureBlocking(false);设置为非阻塞 到这里ServerSocketChannel也就是基本上实例化完了
+	   -->init(Channel channel)--ServerBootstrap这里里面也没干啥，主要就是把上面的channel再次初始化，绑定一些相关属性,绑定Options，attribute，
+	     -->ch.pipeline().addLast(new ServerBootstrapAcceptor(currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs)) 这个算是最终要的，添加一个连接注册器
+	   -->register(Channel channel)--EventLoopGroup即bossGroup>MultithreadEventLoopGroup
+	     -->next() 获取一个选择器处理
+		   -->PowerOfTwoEventExecutorChooser优化过的通过&计算得到一个线程池去注册
+		   -->GenericEventExecutorChooser普通的一个算法得到一个线程去注册
+		     -->next()
+		 -->register(channel)
+	     -->register(final Channel channel, final ChannelPromise promise) MultithreadEventLoopGroup
+		   -->register(EventLoop eventLoop, final ChannelPromise promise)  AbstractChannel.AbstractUnsafe
+		     -->register0(ChannelPromise promise) AbstractChannel.AbstractUnsafe
+			   -->doRegister() AbstractNioChannel
+	 -->doBind0(final ChannelFuture regFuture, final Channel channel,final SocketAddress localAddress, final ChannelPromise promise)
+		-->bind(SocketAddress localAddress, ChannelPromise promise) Channel
+		  -->bind(SocketAddress localAddress, ChannelPromise promise) DefaultChannelPipeline
+		    -->bind(final SocketAddress localAddress, final ChannelPromise promise) AbstractChannelHandlerContext
+			  -->invokeBind(SocketAddress localAddress, ChannelPromise promise) AbstractChannelHandlerContext
+			    -->bind(ChannelHandlerContext ctx, SocketAddress localAddress, ChannelPromise promise) HeadContext
+				  -->bind(final SocketAddress localAddress, final ChannelPromise promise) AbstractChannel
+				    -->doBind(SocketAddress localAddress) NioServerSocketChannel
