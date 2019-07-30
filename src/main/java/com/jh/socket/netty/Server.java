@@ -1,10 +1,13 @@
 package com.jh.socket.netty;
 
+import com.jh.socket.netty.in.AInHander;
+import com.jh.socket.netty.in.BInHandler;
+import com.jh.socket.netty.in.CInHandler;
+import com.jh.socket.netty.out.AOutHandler;
+import com.jh.socket.netty.out.BOutHandler;
+import com.jh.socket.netty.out.COutHandler;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -31,11 +34,18 @@ public class Server {
                     .childOption(ChannelOption.SO_BACKLOG, 100)
                     //设置这样做好的好处就是禁用nagle算法 nagle是尽可能的把小包合并发送一个大包，最大延迟500ms
                     .childOption(ChannelOption.TCP_NODELAY, true)
-                    .handler(new ServerHandler())
+//                    .handler(new ServerHandler())
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             System.out.println("init Channel");
+                            ChannelPipeline channelPipeline = ch.pipeline();
+//                            channelPipeline.addLast(new AInHander());
+//                            channelPipeline.addLast(new BInHandler());
+//                            channelPipeline.addLast(new CInHandler());
+                            channelPipeline.addLast(new AOutHandler());
+                            channelPipeline.addLast(new BOutHandler());
+                            channelPipeline.addLast(new COutHandler());
                         }
                     });
 
