@@ -69,13 +69,14 @@ public class NioClient {
                     readByffer.clear();
                 } else if(key.isWritable()){
                     ByteBuffer writerBuffer = ByteBuffer.allocate(1024);
-                    writerBuffer.put("hello server".getBytes());
+                    writerBuffer.put("1214HELLO, WORLD".getBytes());
 
                     writerBuffer.flip();
 
                     sc.write(writerBuffer);
 
                     writerBuffer.clear();
+                    System.out.println("finish write");
                 }
 
             }

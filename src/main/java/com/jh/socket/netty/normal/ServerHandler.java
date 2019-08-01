@@ -1,4 +1,4 @@
-package com.jh.socket.netty;
+package com.jh.socket.netty.normal;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

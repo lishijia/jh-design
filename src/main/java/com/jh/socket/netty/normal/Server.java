@@ -1,11 +1,8 @@
-package com.jh.socket.netty;
+package com.jh.socket.netty.normal;
 
-import com.jh.socket.netty.in.AInHander;
-import com.jh.socket.netty.in.BInHandler;
-import com.jh.socket.netty.in.CInHandler;
-import com.jh.socket.netty.out.AOutHandler;
-import com.jh.socket.netty.out.BOutHandler;
-import com.jh.socket.netty.out.COutHandler;
+import com.jh.socket.netty.normal.out.AOutHandler;
+import com.jh.socket.netty.normal.out.BOutHandler;
+import com.jh.socket.netty.normal.out.COutHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
