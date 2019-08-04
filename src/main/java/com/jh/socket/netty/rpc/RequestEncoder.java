@@ -5,11 +5,11 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
- * @program:
- * @description:
- * @author: lishijia
- * @create: 2019-08-02 10:47
- **/
+ * +--------+--------------------+
+ * |   1  |   1  |    4   |  ?   |
+ * | type | flag | length | body |
+ * +--------+--------------------+
+ */
 public class RequestEncoder extends MessageToByteEncoder<RequestParam> {
 
     @Override
@@ -22,5 +22,6 @@ public class RequestEncoder extends MessageToByteEncoder<RequestParam> {
         out.writeInt(requestParam.getLength());
         out.writeBytes(requestParam.getBody().getBytes());
     }
+
 
 }

@@ -1,5 +1,9 @@
 package com.jh;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * @program:
  * @description:
@@ -11,11 +15,14 @@ public class JvmTest {
     static JvmTest jvmTest = new JvmTest();
 
     public static void main(String[] args){
-        long i=0L;
-        while( i < 1000){
-            jvmTest.pushWork(i);
-        }
-        System.out.println("finish job");
+
+        System.out.println(12&0);
+
+//        long i=0L;
+//        while( i < 1000){
+//            jvmTest.pushWork(i);
+//        }
+//        System.out.println("finish job");
     }
 
     public void pushWork(long id){

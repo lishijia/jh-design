@@ -28,13 +28,20 @@ public class RcpClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
+                            ch.pipeline().addLast(new ClientHandler());
                             ch.pipeline().addLast(new RequestEncoder());
                         }
                     });
             ChannelFuture channelFuture = b.connect("127.0.0.1", 6379).sync();
+            byte[] bodyB = new byte[63*1024];
+            byte[] bodyB1 = new byte[64*1024];
+            bodyB[0] = (byte)1;
             String body = "this message is from client";
-            channelFuture.channel().writeAndFlush(new RequestParam((byte) 1, (byte) 1, body.length(), body));
-            channelFuture.channel().writeAndFlush(new RequestParam((byte) 2, (byte) 2, body.length(), body));
+//            channelFuture.channel().writeAndFlush(new RequestParam((byte) 1, (byte) 2, bodyB1.length, new String(bodyB1)));
+            channelFuture.channel().writeAndFlush(new RequestParam((byte) 1, (byte) 2, bodyB.length, new String(bodyB)));
+//            channelFuture.channel().writeAndFlush(new RequestParam((byte) 1, (byte) 2, bodyB.length, new String(bodyB)));
+//            channelFuture.channel().writeAndFlush(new RequestParam((byte) 1, (byte) 2, bodyB.length, new String(bodyB)));
+//            channelFuture.channel().writeAndFlush(new RequestParam((byte) 2, (byte) 2, body.length(), body));
             System.out.println("message already send.");
             channelFuture.channel().closeFuture().sync();
         } finally {
