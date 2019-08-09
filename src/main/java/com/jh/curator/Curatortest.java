@@ -2,6 +2,7 @@ package com.jh.curator;
 
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 
+import java.util.LinkedHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class Curatortest {
@@ -18,6 +19,8 @@ public class Curatortest {
         } finally {
             lock.release();
         }
+
+        LinkedHashMap hashMap = new LinkedHashMap(100, 0.75f, true);
 
     }
 
