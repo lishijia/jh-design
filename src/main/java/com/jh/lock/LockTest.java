@@ -20,11 +20,11 @@ public class LockTest {
 
     private void startTest() {
         ExecutorService executorService = Executors.newFixedThreadPool(5);
-//        executorService.submit(new AThread(lock, "1"));
-//        executorService.submit(new AThread(lock, "2"));
+        executorService.submit(new AThread(lock, "1"));
+        executorService.submit(new AThread(lock, "2"));
 
-        executorService.submit(new BThread(lock, "1"));
-        executorService.submit(new BThread(lock, "2"));
+//        executorService.submit(new BThread(lock, "1"));
+//        executorService.submit(new BThread(lock, "2"));
     }
 
     static class BThread implements Runnable {
@@ -67,7 +67,7 @@ public class LockTest {
             try {
                 lock.lock();
                 System.out.println(name);
-                Thread.sleep(10000);
+                Thread.sleep(100000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
