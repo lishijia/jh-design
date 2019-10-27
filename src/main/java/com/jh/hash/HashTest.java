@@ -1,6 +1,8 @@
 package com.jh.hash;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @program:
@@ -11,9 +13,12 @@ import java.util.HashMap;
 public class HashTest {
 
     public static void main(String[] args){
+        Map<Object, Object> map = new HashMap<>();
         for(int i=0;i<1000;i++){
-            System.out.println(hash(i));
+            map.put(i, i);
         }
+//        new ArrayList<>();
+//        new HashMap<>();
     }
 
     static final int hash(Object key) {
